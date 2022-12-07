@@ -51,3 +51,5 @@ console.log(input.indexOf(substring) + NO_OF_CHARACTERS)
 
 
 
+// let currentDir:string = ""
+export {}
