@@ -16,8 +16,6 @@ for ( let line of arr){
     grid.push(nodes)
 }
 
-console.log(grid)
-
 let sumEdges = 0
 let maxTrees = -Infinity
 
@@ -26,7 +24,7 @@ for (let i = 0; i < gridSize; i++){
         if ( i === 0 || j === 0 || i === gridSize - 1 || j === gridSize -1){
             sumEdges += 1
         } else {
-            traversal2(i,j)
+            traversal(i,j)
         }
     }
 }
@@ -48,14 +46,9 @@ function traverseColumn(rowNo:number, colNo:number, no:number){
         }
     }
 
-    if(rowNo - 1 === 0 && upNodes[0] < no) {
+    if ( upNodes.every((x:number)=> x < no) || downNodes.every((x:number) => x < no)){
         isVisible = true
         return isVisible
-    } else {
-        if ( upNodes.every((x:number)=> x < no) || downNodes.every((x:number) => x < no)){
-            isVisible = true
-            return isVisible
-        }
     }
 }
 
@@ -76,9 +69,7 @@ function traverseColumn2(rowNo:number, colNo:number, no:number){
             }
         }
     }
-
-    // console.log(upNodes, downNodes, no)
-
+    // this reverse() was an epiphany at 1:30 P.M
     for (let up of upNodes.reverse()){
         if (up >= no){
             noOfUpTrees+=1
@@ -98,20 +89,7 @@ function traverseColumn2(rowNo:number, colNo:number, no:number){
         }
     }
 
-    // console.log(noOfUpTrees, noOfDownTrees, "From Node", no)
-
     return noOfDownTrees * noOfUpTrees
-
-
-    // if(rowNo - 1 === 0 && upNodes[0] < no) {
-    //     isVisible = true
-    //     return isVisible
-    // } else {
-    //     if ( upNodes.every((x:number)=> x < no) || downNodes.every((x:number) => x < no)){
-    //         isVisible = true
-    //         return isVisible
-    //     }
-    // }
 }
 
 function traverseRow(rowNo:number, colNo:number, no:number){
@@ -120,7 +98,6 @@ function traverseRow(rowNo:number, colNo:number, no:number){
     let isVisible:boolean = false
     for (let i = 0; i < gridSize; i++){
         if ( i !== colNo ){
-            // console.log(arr[rowNo][i], `Traversing row for ${rowNo} ${colNo}`)
             if ( i < colNo){
                 leftNodes.push(+arr[rowNo][i])
             } else {
@@ -128,16 +105,10 @@ function traverseRow(rowNo:number, colNo:number, no:number){
             }
         }
     }
-    // console.log(rowNo,colNo, leftNodes, rightNodes, no)
-    if(colNo - 1 === 0 && leftNodes[0] < no) {
-        isVisible = true
-        return isVisible
-    } else {
         if ( leftNodes.every((x:number)=> x < no ) || rightNodes.every((x:number) => x < no)){
             isVisible = true
             return isVisible
         }
-    }
 }
 function traverseRow2(rowNo:number, colNo:number, no:number){
     const leftNodes: any = []
@@ -153,9 +124,9 @@ function traverseRow2(rowNo:number, colNo:number, no:number){
             }
         }
     }
-    // console.log(rowNo,colNo, leftNodes, rightNodes, no)
+
+    //Same epiphany here
     for (let left of leftNodes.reverse()){
-        // console.log("Left node", left, no)
         if (left >= no){
             noOfLeftTrees+=1
             break
@@ -165,7 +136,6 @@ function traverseRow2(rowNo:number, colNo:number, no:number){
         }
     }
     for (let right of rightNodes){
-        // console.log("Right node", right, no)
         if (right >= no){
             noOfRightTrees+=1
             break
@@ -174,10 +144,7 @@ function traverseRow2(rowNo:number, colNo:number, no:number){
             noOfRightTrees+=1
         }
     }
-
-    // console.log(noOfLeftTrees, noOfRightTrees,"From Node",  no)
     return noOfRightTrees * noOfLeftTrees
-
 }
 
 
@@ -199,11 +166,9 @@ function traversal2(rowNo:number, colNo:number){
     const no = +arr[rowNo][colNo]
     let colTrees = traverseColumn2(rowNo, colNo, no)
     let rowTrees = traverseRow2(rowNo, colNo, no)
-
-    // console.log(colTrees, rowTrees, no, rowNo, colNo)
-
     maxTrees = Math.max(colTrees * rowTrees, maxTrees)
 }
 
 
+console.log(sumEdges)
 console.log(maxTrees)
